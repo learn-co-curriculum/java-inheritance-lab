@@ -55,6 +55,8 @@ Run `Main` to confirm the output:
 Which sport has been played on the moon? (7 points)
 ```
 
+## `TrueFalseQuestion`
+
 Create a subclass of `Question` named `TrueFalseQuestion`.
 The `TrueFalseQuestion` class should override the `displayQuestion()` method using the following logic:
 
@@ -106,12 +108,80 @@ Olympic gold metals are made of silver. (3 points)
 (2) False
 ```
 
+
+Edit the Junit class named `QuestionTest` in the directory `src\test\java`.
+Add the two test methods `trueFalseQuestion1` and `trueFalseQuestion2` as shown
+below.
+
+```java
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class QuestionTest {
+
+    private final PrintStream standardOut = System.out;
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+
+    @BeforeEach
+    public void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        System.setOut(standardOut);
+    }
+
+    @Test
+    void trueFalseQuestion1() {
+        String expectedOutput = "NFL refs receive Super Bowl rings. (2 points)\n" +
+                "(1) True\n" +
+                "(2) False\n";
+
+        TrueFalseQuestion q = new TrueFalseQuestion();
+        q.setText("NFL refs receive Super Bowl rings.");
+        q.setPoints(2);
+        q.displayQuestion();
+
+        //compare expected output with actual output
+        assertEquals(expectedOutput, outputStreamCaptor.toString());
+    }
+
+    @Test
+    void trueFalseQuestion2() {
+        String expectedOutput = "Olympic gold metals are made of silver. (3 points)\n" +
+                "(1) True\n" +
+                "(2) False\n";
+
+        TrueFalseQuestion q = new TrueFalseQuestion();
+        q.setText("Olympic gold metals are made of silver.");
+        q.setPoints(3);
+        q.displayQuestion();
+
+        //compare expected output with actual output
+        assertEquals(expectedOutput, outputStreamCaptor.toString());
+    }
+    
+}
+```
+
+Run `QuestionTest` and confirm your output matches the exact
+expected output and all tests pass.
+
+### `MultipleChoiceQuestion`
+
 Create a subclass of `Question` named `MultipleChoiceQuestion`.
 
 - Add an instance variable named `choices` that stores an array of strings representing the multiple choices. Add set/get methods for `choices`.
 - Override the `displayQuestion()` method with the following logic:
-    - Call the superclass `displayQuestion()` method to print the question text and points on one line
-    - Use a loop to print each array element as a numbered choice on a separate line as shown:
+  - Call the superclass `displayQuestion()` method to print the question text and points on one line
+  - Use a loop to print each array element as a numbered choice on a separate line as shown:
 
 ```text
 Which team scored the most points in the 2018 season? (5 points)
@@ -184,3 +254,63 @@ What sport did James Naismith invent? (10 points)
 (2) Basketball
 (3) Baseball
 ```
+
+Edit the Junit class named `QuestionTest` to
+add the two test methods `multipleChoiceQuestion1` and `multipleChoiceQuestion2` as shown
+below.
+
+```java
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class QuestionTest {
+
+    //... setup, teardown, other test methods
+
+    @Test
+    void multipleChoiceQuestion1() {
+        String expectedOutput = "Which team scored the most points in the 2018 season? (5 points)\n" +
+                "(1) Patriots\n" +
+                "(2) Broncos\n" +
+                "(3) Browns\n" +
+                "(4) Steelers\n";
+
+        MultipleChoiceQuestion q = new MultipleChoiceQuestion();
+        q.setText("Which team scored the most points in the 2018 season?");
+        q.setPoints(5);
+        q.setChoices(new String[]{"Patriots", "Broncos", "Browns", "Steelers"});
+        q.displayQuestion();
+
+        //compare expected output with actual output
+        assertEquals(expectedOutput, outputStreamCaptor.toString());
+    }
+
+    @Test
+    void multipleChoiceQuestion2() {
+        String expectedOutput = "What sport did James Naismith invent? (10 points)\n" +
+                "(1) Football\n" +
+                "(2) Basketball\n" +
+                "(3) Baseball\n";
+
+        MultipleChoiceQuestion q = new MultipleChoiceQuestion();
+        q.setText("What sport did James Naismith invent?");
+        q.setPoints(10);
+        q.setChoices(new String[]{"Football", "Basketball", "Baseball"});
+        q.displayQuestion();
+
+        //compare expected output with actual output
+        assertEquals(expectedOutput, outputStreamCaptor.toString());
+    }
+}
+```
+
+Run `QuestionTest` and confirm your output matches the exact
+expected output and all tests pass.
+
+![inheritance lab junit tests pass](https://curriculum-content.s3.amazonaws.com/6677/pillars/inheritance_lab_junit.png)
